@@ -52,7 +52,9 @@ spec:
             - --log.level={{ .Values.server.thanos.logLevel }}
             - --tsdb.path={{ .Values.server.persistentVolume.mountPath }}
             - --prometheus.url=http://127.0.0.1:9090{{ .Values.server.prefixURL }}
-            - --reloader.config-file={{ .Values.server.configPath }}
+            - --reloader.config-file=/etc/config/prometheus.yml
+            - --reloader.config-envsubst-file=/etc/prometheus/prometheus.yml
+            - --reloader.rule-dir=/etc/config/rules
           {{- range $key, $value := .Values.server.thanos.extraArgs }}
             - --{{ $key }}={{ $value }}
           {{- end }}
@@ -69,6 +71,9 @@ spec:
             - name: storage-volume
               mountPath: {{ .Values.server.persistentVolume.mountPath }}
               subPath: "{{ .Values.server.persistentVolume.subPath }}"
+            - name: prometheus-config
+              mountPath: /etc/prometheus
+              readOnly: false
           {{- range .Values.server.extraHostPathMounts }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
@@ -101,7 +106,7 @@ spec:
           {{- if .Values.server.retention }}
             - --storage.tsdb.retention.time={{ .Values.server.retention }}
           {{- end }}
-            - --config.file={{ .Values.server.configPath }}
+            - --config.file=/etc/prometheus/prometheus.yml
             - --storage.tsdb.path={{ .Values.server.persistentVolume.mountPath }}
             - --storage.tsdb.min-block-duration={{ .Values.server.blockDuration }}
             - --storage.tsdb.max-block-duration={{ .Values.server.blockDuration }}

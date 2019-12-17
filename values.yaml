@@ -17,6 +17,7 @@ server:
   persistentVolume:
       enabled: false
   replicaCount: 2
+
   thanos:
       repository: dockerhub.azk8s.cn/thanosio/thanos
   global:
