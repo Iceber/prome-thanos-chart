@@ -1,0 +1,24 @@
+{{- if .Values.server.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+{{- if .Values.server.thanos.headless.annotations }}
+  annotations:
+{{ toYaml .Values.server.thanos.headless.annotations | indent 4 }}
+{{- end }}
+  labels:
+    {{- include "prometheus.server.labels" . | nindent 4 }}
+{{- if .Values.server.thanos.headless.labels }}
+{{ toYaml .Values.server.thanos.headless.labels | indent 4 }}
+{{- end }}
+  name: {{ template "prometheus.server.fullname" . }}-thanos-grpc-headless
+spec:
+  clusterIP: None
+  ports:
+    - name: grpc
+      port: {{ .Values.server.thanos.headless.servicePort }}
+      protocol: TCP
+      targetPort: 10901
+  selector:
+    {{- include "prometheus.server.matchLabels" . | nindent 4 }}
+{{- end -}}

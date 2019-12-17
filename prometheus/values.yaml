@@ -260,6 +260,7 @@ alertmanager:
     fsGroup: 65534
 
   service:
+    enabled: false
     annotations: {}
     labels: {}
     clusterIP: ""
@@ -540,11 +541,12 @@ nodeExporter:
     servicePort: 9100
     type: ClusterIP
 
+
 server:
   ## Prometheus server container name
   ##
   enabled: true
-  name: server
+  name: "thanos-prome"
   sidecarContainers:
 
   ## Prometheus server container image
@@ -593,6 +595,23 @@ server:
 
   ## Path to a configuration file on prometheus server container FS
   configPath: /etc/config/prometheus.yml
+
+  thanos:
+      image:
+          repository: thanosio/thanos
+          tag: master-2019-12-14-bec86666
+          pullPolicy: IfNotPresent
+
+      logLevel: debug
+      extraArgs: {}
+      resources: {}
+
+      headless:
+        annotations: {}
+        labels: {}
+        servicePort: 10901
+          
+  blockDuration: 2h
 
   global:
     ## How frequently to scrape targets by default

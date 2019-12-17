@@ -1,4 +1,5 @@
 {{- if .Values.server.enabled -}}
+{{- if .Values.server.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,11 +12,11 @@ metadata:
 {{- if .Values.server.service.labels }}
 {{ toYaml .Values.server.service.labels | indent 4 }}
 {{- end }}
+
   name: {{ template "prometheus.server.fullname" . }}
+
 spec:
-{{- if .Values.server.service.clusterIP }}
-  clusterIP: {{ .Values.server.service.clusterIP }}
-{{- end }}
+  clusterIP: None
 {{- if .Values.server.service.externalIPs }}
   externalIPs:
 {{ toYaml .Values.server.service.externalIPs | indent 4 }}
@@ -43,4 +44,5 @@ spec:
   sessionAffinity: {{ .Values.server.service.sessionAffinity }}
 {{- end }}
   type: "{{ .Values.server.service.type }}"
+{{- end }}
 {{- end -}}
