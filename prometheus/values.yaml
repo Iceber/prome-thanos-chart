@@ -612,7 +612,7 @@ server:
         labels: {}
         servicePort: 10901
           
-  blockDuration: 2h
+  blockDuration: ""
 
   global:
     ## How frequently to scrape targets by default
