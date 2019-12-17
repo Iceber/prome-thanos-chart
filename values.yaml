@@ -1,0 +1,27 @@
+rbac:
+    create: true
+
+alertmanager:
+    enabled: false
+
+pushgateway:
+    enabled: false
+
+nodeExporter:
+    enabled: false
+
+kubeStateMetrics:
+    enabled: false
+
+server:
+  persistentVolume:
+      enabled: false
+  replicaCount: 2
+  thanos:
+      repository: dockerhub.azk8s.cn/thanosio/thanos
+  global:
+      scrape_interval: 15s
+      scrape_timeout: 4s
+      external_labels:
+          prometheus_group: 0
+          prometheus_replica: $(HOSTNAME)
