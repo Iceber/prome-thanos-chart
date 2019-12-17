@@ -61,6 +61,7 @@ spec:
           {{- range $key, $value := .Values.server.thanos.extraArgs }}
             - --{{ $key }}={{ $value }}
           {{- end }}
+          {{- if .Values.server.env }}
           env:
 {{ toYaml .Values.server.env | indent 12}}
           {{- end }}
@@ -261,5 +262,5 @@ spec:
         - name: storage-volume
           emptyDir: {}
 {{- end }}
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
