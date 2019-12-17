@@ -55,6 +55,9 @@ spec:
             - --reloader.config-file=/etc/config/prometheus.yml
             - --reloader.config-envsubst-file=/etc/prometheus/prometheus.yml
             - --reloader.rule-dir=/etc/config/rules
+          {{- if .Values.server.thanos.objstore.enabled }}
+            - --objstore.config-file=/etc/thanos/objstore-config/{{ .Values.server.thanos.objstore.configFileName }}
+          {{- end }}
           {{- range $key, $value := .Values.server.thanos.extraArgs }}
             - --{{ $key }}={{ $value }}
           {{- end }}
@@ -74,6 +77,10 @@ spec:
             - name: prometheus-config
               mountPath: /etc/prometheus
               readOnly: false
+          {{- if .Values.server.thanos.objstore.enabled }}
+            - name: thanos-objstore-config-volume
+              mountPath: /etc/thanos/objstore-config
+          {{- end }}
           {{- range .Values.server.extraHostPathMounts }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
@@ -147,6 +154,9 @@ spec:
             - name: storage-volume
               mountPath: {{ .Values.server.persistentVolume.mountPath }}
               subPath: "{{ .Values.server.persistentVolume.subPath }}"
+            - name: prometheus-config
+              mountPath: /etc/prometheus
+              readOnly: false
           {{- range .Values.server.extraHostPathMounts }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
@@ -196,6 +206,13 @@ spec:
         - name: config-volume
           configMap:
             name: {{ if .Values.server.configMapOverrideName }}{{ .Release.Name }}-{{ .Values.server.configMapOverrideName }}{{- else }}{{ template "prometheus.server.fullname" . }}{{- end }}
+        - name: prometheus-config
+          emptyDir: {}
+    {{- if .Values.server.thanos.objstore.enabled }}
+        - name: thanos-objstore-config-volume
+          configMap:
+            name: {{ .Values.server.thanos.objstore.configMapName }}
+    {{- end }}
       {{- range .Values.server.extraHostPathMounts }}
         - name: {{ .name }}
           hostPath:

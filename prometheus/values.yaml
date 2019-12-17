@@ -602,6 +602,10 @@ server:
       logLevel: debug
       extraArgs: {}
       resources: {}
+      objstore:
+          enabled: false
+          configFileName: config.yaml
+          configMapName: ""
 
       headless:
         annotations: {}
