@@ -1,5 +1,6 @@
 # Prometheus with Thanos sidecar
-在 Prometheus 官方 helm chart 下进行修改
+在 Prometheus 官方 [helm chart](https://github.com/helm/charts/tree/master/stable/prometheus) 下进行修改
+请搭配 thanos-chart 项目食用
 
 ### 特性
 - Thanos sidecar 默认开启，并创建 grpc Headless Service
@@ -10,6 +11,10 @@
 - Thanos 开启对象存储时， 通过配置 Values.server.blockDuration 使 Prometheus的min-block-duration和max-block-duration 需要保持一致来禁止 Prometheus 压缩数据
 - 支持 Prometheus 配置文件中使用环境变量
 -  Thanos sidecar 和 Prometheus 共享 Values.service.env 中设置的环境变量以及额外的挂载卷 (如果有特殊需求可以进行修改该特性)
+
+### 未实现功能
+- 未增加 Thanos sidecar http Service, 如果有额外需要，可实现该功能
+- 未实现自动生成 Thanos 对象存储的ConfigMap，因为 thanos-chart 也需要该ConfigMap，所以需要开启对象存储时需要先创建ConfigMap
 
 
 ## 安装
@@ -27,6 +32,13 @@ helm upgrade -n <namespace> -f values.yml prom_thanos
 ```
 helm uninstall -n <namespace> prom_thanos
 ```
+
+### 开启对象存储
+保存Thanos 对象存储 ConfigMap, 和 Thanos store 组件共享一个ConfigMap， 可参考 thanos-chart 项目
+```
+kubectl -n <namespaece> apply -f <thanos-objstore-configmap-name> 
+```
+##### 可以使用 [fake-s3](https://github.com/jubos/fake-s3) 项目进行 s3 存储测试
 
 values.yml
 

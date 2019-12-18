@@ -25,7 +25,7 @@ server:
   thanos:
       repository: dockerhub.azk8s.cn/thanosio/thanos
       objstore:
-          enabled: true
+          enabled: false
           configFileName: s3.yml
           configMapName: thanos-objstore-s3-config
 
