@@ -1,5 +1,5 @@
 # Prometheus with Thanos sidecar
-在 Prometheus 官方 [helm chart](https://github.com/helm/charts/tree/master/stable/prometheus) 下进行修改
+在 Prometheus 官方 [helm chart](https://github.com/helm/charts/tree/master/stable/prometheus) 下进行修改  
 请搭配 thanos-chart 项目食用
 
 ### 特性
@@ -80,3 +80,23 @@ server:
           prometheus_group: 0
           prometheus_replica: $(HOSTNAME)
 ```
+
+## 和 stable/prometheus 配置的差异
+
+Parameter | Description | Default
+--------- | ----------- | -------
+`server.thanos.image.repository` | | `thanosio/thanos`
+`server.thanos.image.tag` | | `master-2019-12-14-bec86666`
+`server.thanos.image.pullPolicy` | | `IfNotPresent`
+`server.thanos.logLevel`| | debug
+`server.thanos.extraArgs` | | {}
+`server.thanos.resources` | | {}
+`server.thanos.objstore.enabled` | | false
+`server.thanos.objstore.configFileName` | | ""
+`server.thanos.objstore.configMapName` | | ""
+`server.thanos.headless.annotations` | | {}
+`server.thanos.headless.labels` | | {}
+`server.thanos.headless.servicePort` | | 10901
+`server.blockDuration` | `设置 Prometheus max block duration 和 min block duration 使其相同大小， 开启 Thanos 对象存储需要Prometheus 关闭数据压缩` | ""
+`server.service.enabled` | `是否开启 Prometheus 的 http service, 使用 Thanos 默认关闭` | false
+`server.configPath` | `废弃` |

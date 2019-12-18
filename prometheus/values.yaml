@@ -260,7 +260,6 @@ alertmanager:
     fsGroup: 65534
 
   service:
-    enabled: false
     annotations: {}
     labels: {}
     clusterIP: ""
@@ -546,7 +545,7 @@ server:
   ## Prometheus server container name
   ##
   enabled: true
-  name: "prome"
+  name: server
   sidecarContainers:
 
   ## Prometheus server container image
@@ -855,6 +854,7 @@ server:
     fsGroup: 65534
 
   service:
+    enabled: false
     annotations: {}
     labels: {}
     clusterIP: ""
