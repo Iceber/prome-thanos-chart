@@ -17,17 +17,11 @@ server:
   persistentVolume:
       enabled: false
   replicaCount: 2
-  statefulSet:
-      enabled: true
 
-
-  blockDuration: 5m
   thanos:
       repository: dockerhub.azk8s.cn/thanosio/thanos
       objstore:
           enabled: false
-          configFileName: s3.yml
-          configMapName: thanos-objstore-s3-config
 
   global:
       scrape_interval: 15s

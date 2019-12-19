@@ -20,12 +20,12 @@
 ## 安装
 
 ```
-helm install -n <namespace> -f values.yml prom_thanos ./prometheus
+helm install -n <namespace> -f values.yaml prom_thanos ./prometheus
 ```
 ## 更新
 
 ```
-helm upgrade -n <namespace> -f values.yml prom_thanos
+helm upgrade -n <namespace> -f values.yaml prom_thanos
 ```
 ## 删除
 
@@ -40,7 +40,12 @@ kubectl -n <namespaece> apply -f <thanos-objstore-configmap-name>
 ```
 ##### 可以使用 [fake-s3](https://github.com/jubos/fake-s3) 项目进行 s3 存储测试
 
-values.yml
+需要配置 blockDuration, 使Prometheus 的 min-block-duration, max-block-duration 一致 https://thanos.io/components/sidecar.md
+```
+blockDuration: 2h
+```
+
+values.yaml
 
 ```
 rbac:
@@ -62,8 +67,6 @@ server:
   persistentVolume:
       enabled: false
   replicaCount: 2
-  statefulSet:
-      enabled: true
 
   blockDuration: 5m
   thanos:
